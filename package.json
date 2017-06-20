@@ -6,7 +6,7 @@
     "email": "zurfyx@gmail.com",
     "url": "zurfyx.com"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -41,7 +41,8 @@
     "bluebird": "^3.5.0",
     "firebase": "^4.1.2",
     "public-ip": "^2.3.5",
-    "socket.io-client": "^2.0.3"
+    "socket.io-client": "^2.0.3",
+    "tslib": "^1.7.1"
   },
   "devDependencies": {
     "@types/jest": "^20.0.0",
