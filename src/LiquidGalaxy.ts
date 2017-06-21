@@ -36,13 +36,17 @@ export class LiquidGalaxy {
     const ip = await this.getPublicFirebaseLikeIp();
 
     return new Promise<LiquidGalaxyServer[]>((resolve) => {
-      db.ref(`up/${ip}`).on('value', (snapshot: firebase.database.DataSnapshot) => {
+      const dbQuery = db
+        .ref(`up/${ip}`).orderByChild('timestamp')
+        .startAt(Date.now() - 120 * 1000); // Last 120 seconds.
+      dbQuery.on('value', (snapshot: firebase.database.DataSnapshot) => {
         const up: FirebaseUp = snapshot.val();
         const servers: LiquidGalaxyServer[] = up && Object.keys(up).map((upKey) => {
           const { localIp, port } = up[upKey];
           return new LiquidGalaxyServer(`http://${localIp}:${port}`);
         });
-        return resolve(servers);
+        const noRepeatedServers: LiquidGalaxyServer[] = this.excludeRepeated(servers);
+        return resolve(noRepeatedServers);
       });
     });
   }
@@ -61,5 +65,12 @@ export class LiquidGalaxy {
     const ip: string = await publicIp.v4();
     const ipConverted = ip.replace(/\./g, '%');
     return ipConverted;
+  }
+
+  /**
+   * Remove repeated Liquid Galaxy Servers.
+   */
+  private excludeRepeated(servers: LiquidGalaxyServer[]): LiquidGalaxyServer[] {
+    return servers;
   }
 }
