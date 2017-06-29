@@ -74,6 +74,16 @@ export class LiquidGalaxy {
    * Remove repeated Liquid Galaxy Servers.
    */
   private excludeRepeated(servers: LiquidGalaxyServer[]): LiquidGalaxyServer[] {
-    return servers;
+    const uris = new Set();
+    const result: LiquidGalaxyServer[] = [];
+    
+    servers.forEach((server) => {
+      if (uris.has(server.uri)) {
+        return;
+      }
+      uris.add(server.uri);
+      result.push(server);
+    });
+    return result;
   }
 }
