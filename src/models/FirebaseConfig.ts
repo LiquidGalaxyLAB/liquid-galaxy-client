@@ -1,5 +1,3 @@
-import config from '../config';
-
 export class FirebaseConfig {
   apiKey: string;
   authDomain: string;
@@ -7,6 +5,8 @@ export class FirebaseConfig {
   projectId: string;
   storageBucket: string;
   messagingSenderId: string;
-}
 
-export const DEFAULT_FIREBASE_CONFIG = config.firebase as FirebaseConfig;
+  constructor(values?: Object) {
+    Object.assign(this, values);
+  }
+}

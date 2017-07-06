@@ -1,5 +1,5 @@
 export default {
-  // Default API Firebase. A custom one can still be set on the LiquidGalaxy initialization.
+  // Default API Firebase. A custom one can be set through constructor config params.
   firebase: {
     apiKey: 'AIzaSyAddzwazFGRJiC-GW35Zgr7XdhUk8x0890',
     authDomain: 'liquid-galaxy-api.firebaseapp.com',
