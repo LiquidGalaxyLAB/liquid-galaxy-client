@@ -6,11 +6,11 @@ import {
 } from './utils';
 
 export class LiquidGalaxyServer {
-  serverUid: string;
+  uid: string;
   firebaseInstance: FirebaseInstance;
 
   constructor(serverUid: string, firebaseInstance?: FirebaseInstance) {
-    this.serverUid = serverUid;
+    this.uid = serverUid;
     this.firebaseInstance = firebaseInstance || DEFAULT_FIREBASE_INSTANCE;
   }
 
@@ -28,7 +28,7 @@ export class LiquidGalaxyServer {
 
   private writeToQueue(type: string, value: string): Promise<void> {
     return new Promise<void>((resolve) => {
-      const dbRef = this.firebaseInstance.firebase.database().ref(`queue/${this.serverUid}`);
+      const dbRef = this.firebaseInstance.firebase.database().ref(`queue/${this.uid}`);
       const entry = {
         type,
         value,
