@@ -1,90 +1,40 @@
-import * as socketioClient from 'socket.io-client';
+import * as firebase from 'firebase';
 
-function socketKml(socket: any) {
-  const emit = promisifyEmit();
-
-  function writeKML(contents: string): Promise<void> {
-    return emit('P:/kmls', { contents });
-  }
-
-  function writeHrefKML(uri: string): Promise<void> {
-    return emit('P:/kmls', { uri });
-  }
-
-  function writeQuery(contents: string) {
-    return emit('P:/queries', { contents });
-  }
-
-  function promisifyEmit(): Function {
-    const subject = socket;
-    const fun = socket.emit;
-    return (...args: any[]): Promise<any> => (
-      new Promise((resolve) => {
-        fun.call(subject, ...args, () => {
-          resolve();
-        });
-      })
-    );
-  }
-
-  return {
-    writeKML,
-    writeHrefKML,
-    writeQuery,
-  };
-}
+import {
+  FirebaseInstance,
+  DEFAULT_FIREBASE_INSTANCE,
+} from './utils';
 
 export class LiquidGalaxyServer {
-  public readonly uri: string;
+  serverUid: string;
+  firebaseInstance: FirebaseInstance;
 
-  private socket: any;
-  private onEstablishedListeners: (() => void)[] = [];
-  private onDroppedListeners: (() => void)[] = [];
-
-  constructor(uri: string) {
-    this.uri = uri;
+  constructor(serverUid: string, firebaseInstance?: FirebaseInstance) {
+    this.serverUid = serverUid;
+    this.firebaseInstance = firebaseInstance || DEFAULT_FIREBASE_INSTANCE;
   }
 
-  connect() {
-    if (this.socket) {
-      // Socket was already initialized. Reconnect.
-      this.socket.socket.connect();
-      return;
-    }
-    this.socket = socketioClient.connect(this.uri);
-    this.socket.on('connect', () => this.emitEstablished());
-    this.socket.on('disconnect', () => this.emitDropped());
+  writeKML(contents: string): Promise<void> {
+    return this.writeToQueue('kml:value', contents);
   }
 
-  disconnect() {
-    this.socket.disconnect();
+  writeHrefKML(uri: string): Promise<void> {
+    return this.writeToQueue('kml:href', uri);
   }
 
-  onConnectionEstablished(callback: () => void) {
-    this.onEstablishedListeners.push(callback);
+  writeQuery(contents: string): Promise<void> {
+    return this.writeToQueue('queries', contents);
   }
 
-  onConnectionDropped(callback: () => void) {
-    this.onDroppedListeners.push(callback);
-  }
-
-  private emitEstablished() {
-    this.onEstablishedListeners.forEach((callback) => {
-      callback();
+  private writeToQueue(type: string, value: string): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const dbRef = this.firebaseInstance.firebase.database().ref(`queue/${this.serverUid}`);
+      const entry = {
+        type,
+        value,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+      };
+      dbRef.push(entry, () => resolve());
     });
-  }
-
-  private emitDropped() {
-    this.onDroppedListeners.forEach((callback) => {
-      callback();
-    });
-  }
-
-  kml() {
-    if (!this.socket) {
-      console.error('No connection has been initialized. Call connect() first!');
-      return;
-    }
-    return socketKml(this.socket);
   }
 }

@@ -1,7 +1,7 @@
 import * as firebase from 'firebase';
 
 import config from '../config';
-import { FirebaseConfig } from './FirebaseConfig';
+import { FirebaseConfig } from '../models/FirebaseConfig';
 
 export class FirebaseInstance {
   firebase: firebase.app.App;

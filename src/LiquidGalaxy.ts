@@ -1,4 +1,3 @@
-import * as firebase from 'firebase';
 import * as publicIp from 'public-ip';
 
 import {
@@ -57,7 +56,7 @@ export class LiquidGalaxy {
     }
 
     return Object.keys(servers).map(serverUid => (
-      new LiquidGalaxyServer(serverUid, config)
+      new LiquidGalaxyServer(serverUid, this.firebaseInstance)
     ));
   }
 }
