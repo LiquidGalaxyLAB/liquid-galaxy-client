@@ -1,4 +1,4 @@
-import * as publicIp from 'public-ip';
+import * as ip from 'what-is-my-ip-address';
 
 import {
   FirebaseInstance,
@@ -42,8 +42,8 @@ export class LiquidGalaxy {
   }
 
   private async getPublicFirebaseLikeIp(): Promise<string> {
-    const ip: string = await publicIp.v4();
-    const encodedIp = ip.replace(/\./g, ':');
+    const currentIp: string = await ip.v4();
+    const encodedIp = currentIp.replace(/\./g, ':');
     return encodedIp;
   }
 
