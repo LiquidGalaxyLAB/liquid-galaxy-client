@@ -42,7 +42,7 @@
     "firebase": "^4.1.2",
     "socket.io-client": "^2.0.3",
     "tslib": "^1.7.1",
-    "what-is-my-ip-address": "^1.0.0"
+    "what-is-my-ip-address": "^1.0.1"
   },
   "devDependencies": {
     "@types/jest": "^20.0.0",
