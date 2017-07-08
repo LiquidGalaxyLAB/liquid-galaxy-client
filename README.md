@@ -2,6 +2,7 @@
 
 > The Liquid Galaxy client.
 
+[![npm Version](https://img.shields.io/npm/v/liquid-galaxy.svg)](https://www.npmjs.com/package/liquid-galaxy)
 [![Build Status](https://travis-ci.org/LiquidGalaxyLAB/liquid-galaxy-client.svg?branch=master)](https://travis-ci.org/LiquidGalaxyLAB/liquid-galaxy-client)
 [![David](https://david-dm.org/LiquidGalaxyLAB/liquid-galaxy-client.svg)](https://david-dm.org/LiquidGalaxyLAB/liquid-galaxy-client)
 [![David](https://david-dm.org/LiquidGalaxyLAB/liquid-galaxy-client/dev-status.svg)](https://david-dm.org/LiquidGalaxyLAB/liquid-galaxy-client#info=devDependencies)
