@@ -4,6 +4,7 @@ import {
   FirebaseInstance,
   DEFAULT_FIREBASE_INSTANCE,
 } from './utils';
+import { FirebaseLiquidGalaxyServer } from './models';
 import { LiquidGalaxyServer } from './LiquidGalaxyServer';
 
 export class LiquidGalaxy {
@@ -35,7 +36,7 @@ export class LiquidGalaxy {
         .ref(`ips/${ip}`)
         .orderByChild('lastOnline')
         .startAt(Date.now() - 120 * 1000) // Last 120 seconds only.
-        .on('value', (snapshot: firebase.database.DataSnapshot) => {
+        .once('value', (snapshot: firebase.database.DataSnapshot) => {
           resolve(this.serversFromFirebaseDataSnapshot(snapshot));
         });
     });
@@ -55,8 +56,12 @@ export class LiquidGalaxy {
       return [];
     }
 
-    return Object.keys(servers).map(serverUid => (
-      new LiquidGalaxyServer(serverUid, this.firebaseInstance)
-    ));
+    return Object.entries(servers)
+      .filter(([, info]: [string, FirebaseLiquidGalaxyServer]) => (
+        info.isOnline // < 120 sec. are filtered by the Firebase query.
+      ))
+      .map(([uid, info]: [string, FirebaseLiquidGalaxyServer]) => (
+        new LiquidGalaxyServer(uid, info, this.firebaseInstance)
+      ));
   }
 }

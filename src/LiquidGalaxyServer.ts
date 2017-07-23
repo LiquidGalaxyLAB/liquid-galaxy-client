@@ -4,13 +4,20 @@ import {
   FirebaseInstance,
   DEFAULT_FIREBASE_INSTANCE,
 } from './utils';
+import { FirebaseLiquidGalaxyServer } from './models';
 
 export class LiquidGalaxyServer {
   uid: string;
+  info: FirebaseLiquidGalaxyServer;
   firebaseInstance: FirebaseInstance;
 
-  constructor(serverUid: string, firebaseInstance?: FirebaseInstance) {
-    this.uid = serverUid;
+  constructor(
+    uid: string,
+    info: FirebaseLiquidGalaxyServer,
+    firebaseInstance?: FirebaseInstance,
+  ) {
+    this.uid = uid;
+    this.info = info;
     this.firebaseInstance = firebaseInstance || DEFAULT_FIREBASE_INSTANCE;
   }
 
