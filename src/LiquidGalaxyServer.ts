@@ -29,17 +29,21 @@ export class LiquidGalaxyServer {
     return this.writeToQueue('kml:href', uri);
   }
 
+  cleanKml(): Promise<void> {
+    return this.writeToQueue('kml:clean');
+  }
+
   writeQuery(contents: string): Promise<void> {
     return this.writeToQueue('queries', contents);
   }
 
-  private writeToQueue(type: string, value: string): Promise<void> {
+  private writeToQueue(type: string, value?: string): Promise<void> {
     return new Promise<void>((resolve) => {
       const dbRef = this.firebaseInstance.firebase.database().ref(`queue/${this.uid}`);
       const entry = {
         type,
-        value,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
+        ...{ value },
       };
       dbRef.push(entry, () => resolve());
     });
