@@ -43,7 +43,7 @@ export class LiquidGalaxyServer {
       const entry = {
         type,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
-        ...{ value },
+        ...value ? { value } : {},
       };
       dbRef.push(entry, () => resolve());
     });
